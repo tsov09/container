@@ -160,104 +160,46 @@ public:
 			std::cout << "The vector is empty." << std::endl;
 		}
 	}
+	void swap(int& a, int& b) {
+		int temp = a;
+		a = b;
+		b = temp;
+	}
+	void buble_sort() {
+		bool sorted = true;
+		for (int g = 0; g < m_size - 1; g++) {
+			for (int i = 0; i < m_size - 1;) {
+				if (m_ptr[i] > m_ptr[i + 1]) {
+					swap(m_ptr[i], m_ptr[i+1]);
+					sorted = false;
+				}
+				else {
+					i++;
+				}
+			}
+			if (sorted) {
+				break;
+			}
+			sorted = true;
+		}
+	}
 };
 
 int main() {
 	srand(time(NULL));
 	std::cout << std::endl;
-	int a = 1000;
-	int b = 102;
-	int c = 407;
 	Vector<int> arr_i;
+	arr_i.push_back(47);
+	arr_i.push_back(10);
+	arr_i.push_back(46);
+	arr_i.push_back(45);
+	arr_i.push_back(12);
+	arr_i.push_back(17);
+	arr_i.push_back(57);
 	arr_i.print();
+	arr_i.buble_sort();
 	std::cout << std::endl;
-	std::cout << "The vector after call push_back(...) every time: " << std::endl;
-	arr_i.push_back(a + 5);
 	arr_i.print();
-	std::cout << std::endl;
-	arr_i.push_back(b + 104);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.push_back(a + 7);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.push_back(c + 49);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.push_back(b * 7);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.push_back(c);
-	arr_i.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << "The vector after call insert(...): " << std::endl;
-	arr_i.insert(1, c);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.insert(3, c + 17);
-	arr_i.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-
-	arr_i.insert(-1, c);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.insert(1007, c);
-	arr_i.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-
-
-	std::cout << "The vector after call pop_back(): " << std::endl;
-	arr_i.pop_back();
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.pop_back();
-	arr_i.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-
-	std::cout << "The vector after call erase(...): " << std::endl;
-	arr_i.erase(1);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.erase(3);
-	arr_i.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-
-	arr_i.erase(-7);
-	arr_i.print();
-	std::cout << std::endl;
-	arr_i.erase(208);
-	arr_i.print();
-	std::cout << std::endl;
-	std::cout << std::endl;
-
-	std::cout << "The vector after call clear(): " << std::endl;
-	arr_i.clear();
-	arr_i.print();
-
-	bool g = true;
-	bool k = false;
-	Vector<bool> a_bool;
-	a_bool.push_back(g);
-	a_bool.push_back(g);
-	a_bool.push_back(g);
-	a_bool.push_back(g);
-	a_bool.push_back(g);
-	a_bool.print();
-	std::cout << std::endl;
-
-	a_bool.insert(3, k);
-	a_bool.print();
-	std::cout << std::endl;
-
-	a_bool.erase(3);
-	a_bool.print();
-	std::cout << std::endl;
-
 
 	return 0;
 }
