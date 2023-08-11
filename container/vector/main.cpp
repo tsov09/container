@@ -2,188 +2,200 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include "vector.h"
 
+template class Vector<int>
+template class Vector<double>
+template class Vector<float>
 
 template <class T>
-class Vector {
-public:
-	Vector() : m_size(0), m_capacity(0) {}
-	~Vector() {
-		delete[] m_ptr;
+Vector<T>::Vector() : m_size(0), m_capacity(0) {};
+template <class T>
+Vector<T>::~Vector() {
+	delete[] m_ptr;
+}
+template <class T>
+Vector<T>::Vector(const Vector<T>& obj) {
+	m_size = obj.m_size;
+	m_ptr = new T[m_size];
+	for (int i = 0; i < m_size; i++) {
+		m_ptr[i] = obj.m_ptr[i];
 	}
-	Vector(const Vector<T>& obj) {
+}
+template <class T>
+Vector<T>::Vector(Vector<T>&& obj) {
+	std::cout << "Vector move con-tor" << std::endl;
+	m_size = obj.m_size;
+	m_ptr = obj.m_ptr;
+	obj.m_ptr = nullptr;
+	obj.m_size = 0;
+}
+template <class T>
+Vector<T>& Vector<T>::operator = (const Vector<T>& obj) {
+	if (this != &obj) {
+		delete[] m_ptr;
+		m_ptr = nullptr;
 		m_size = obj.m_size;
 		m_ptr = new T[m_size];
 		for (int i = 0; i < m_size; i++) {
 			m_ptr[i] = obj.m_ptr[i];
 		}
 	}
-	Vector(Vector<T>&& obj) {
-		std::cout << "Vector move con-tor" << std::endl;
+	return *this;
+}
+template <class T>
+Vector<T>& Vector<T>::operator = (Vector<T>&& obj) {
+	std::cout << "Vector op. move assign." << std::endl;
+	if (this != &obj) {
+		delete[] m_ptr;
+		m_ptr = nullptr;
 		m_size = obj.m_size;
 		m_ptr = obj.m_ptr;
 		obj.m_ptr = nullptr;
 		obj.m_size = 0;
 	}
-	Vector<T>& operator = (const Vector<T>& obj) {
-		if (this != &obj) {
-			delete[] m_ptr;
-			m_ptr = nullptr;
-			m_size = obj.m_size;
-			m_ptr = new T[m_size];
-			for (int i = 0; i < m_size; i++) {
-				m_ptr[i] = obj.m_ptr[i];
-			}
-		}
-		return *this;
+	return *this;
+}
+template <class T>
+T& Vector<T>::operator[] (int i) {
+	if (i >= m_size || i < 0) {
+		std::cout << "The number is out of range" << std::endl << std::endl;
+		exit(0);
 	}
-	Vector<T>& operator = (Vector<T>&& obj) {
-		std::cout << "Vector op. move assign." << std::endl;
-		if (this != &obj) {
-			delete[] m_ptr;
-			m_ptr = nullptr;
-			m_size = obj.m_size;
-			m_ptr = obj.m_ptr;
-			obj.m_ptr = nullptr;
-			obj.m_size = 0;
-		}
-		return *this;
+	else {
+		return m_ptr[i];
 	}
-	T& operator[] (int i) {
-		if (i >= m_size || i < 0) {
-			std::cout << "The number is out of range" << std::endl << std::endl;
-			exit(0);
-		}
-		else {
-			return m_ptr[i];
-		}
+}
+template <class T>
+int Vector<T>::size() {
+	return m_size;
+}
+template <class T>
+T Vector<T>::gen_element(int x) {
+	if (x >= m_size || x < 0) {
+		std::cout << "The index is out of range" << std::endl << std::endl;
+		exit(0);
 	}
-private:
-	T* m_ptr;
-	int m_size;
-	int m_capacity;
-public:
-	int size() {
-		return m_size;
+	else {
+		return m_ptr[x];
 	}
-	T gen_element(int x) {
-		if (x >= m_size || x < 0) {
-			std::cout << "The index is out of range" << std::endl << std::endl;
-			exit(0);
+}
+template <class T>
+void Vector<T>::push_back(const T& item) {
+	m_size++;
+	if (m_size - 1 == m_capacity) {
+		m_capacity = m_size * 2;
+		T* temp = m_ptr;
+		m_ptr = new T[m_capacity];
+		for (int i = 0; i < m_size - 1; i++) {
+			m_ptr[i] = temp[i];
 		}
-		else {
-			return m_ptr[x];
-		}
+		delete[] temp;
+		temp = nullptr;
+
 	}
-	void push_back(const T& item) {
+	m_ptr[m_size - 1] = item;
+}
+template <class T>
+void Vector<T>::insert(int index, const T& item) {
+	if (index == m_size) {
+		push_back(item);
+	}
+	else if (index < m_size && index >= 0) {
 		m_size++;
 		if (m_size - 1 == m_capacity) {
 			m_capacity = m_size * 2;
 			T* temp = m_ptr;
 			m_ptr = new T[m_capacity];
-			for (int i = 0; i < m_size - 1; i++) {
+			for (int i = 0; i < index; i++) {
 				m_ptr[i] = temp[i];
 			}
+			for (int i = m_size - 1; i > index; i--) {
+				m_ptr[i] = temp[i - 1];
+			}
+			m_ptr[index] = item;
 			delete[] temp;
 			temp = nullptr;
 
 		}
-		m_ptr[m_size - 1] = item;
-	}
-	void insert(int index, const T& item) {
-		if (index == m_size) {
-			push_back(item);
+		else {
+			for (int i = m_size - 1; i > index; i--) {
+				m_ptr[i] = m_ptr[i - 1];
+			}
+			m_ptr[index] = item;
 		}
-		else if (index < m_size && index >= 0) {
-			m_size++;
-			if (m_size - 1 == m_capacity) {
-				m_capacity = m_size * 2;
-				T* temp = m_ptr;
-				m_ptr = new T[m_capacity];
-				for (int i = 0; i < index; i++) {
-					m_ptr[i] = temp[i];
-				}
-				for (int i = m_size - 1; i > index; i--) {
-					m_ptr[i] = temp[i - 1];
-				}
-				m_ptr[index] = item;
-				delete[] temp;
-				temp = nullptr;
+	}
+	else {
+		std::cout << "Invalid index for insert: " << index << "." << std::endl;
+	}
+}
+template <class T>
+void Vector<T>::pop_back() {
+	if (m_size > 0) {
+		m_size--;
+	}
+	else {
+		std::cout << "The vector is empty." << std::endl;
+	}
+}
+template <class T>
+void Vector<T>::erase(int index) {
+	if (index == m_size - 1) {
+		m_size--;
+	}
+	else if (index < m_size - 1 && index >= 0) {
+		for (int i = index; i < m_size; i++) {
+			m_ptr[i] = m_ptr[i + 1];
+		}
+		m_size--;
 
+	}
+	else {
+		std::cout << "Invalid index for erase: " << index << "." << std::endl;
+	}
+}
+template <class T>
+void Vector<T>::clear() {
+	m_size = 0;
+}
+template <class T>
+void Vector<T>::print() {
+	if (m_size > 0) {
+		std::cout << "{ ";
+		for (int i = 0; i < m_size - 1; i++) {
+			std::cout << m_ptr[i] << ", ";
+		}
+		std::cout << m_ptr[m_size - 1] << " }";
+	}
+	else {
+		std::cout << "The vector is empty." << std::endl;
+	}
+}
+template <class T>
+void Vector<T>::swap(int& a, int& b) {
+	int temp = a;
+	a = b;
+	b = temp;
+}
+template <class T>
+void Vector<T>::buble_sort() {
+	bool sorted = true;
+	for (int g = 0; g < m_size - 1; g++) {
+		for (int i = 0; i < m_size - 1;) {
+			if (m_ptr[i] > m_ptr[i + 1]) {
+				swap(m_ptr[i], m_ptr[i+1]);
+				sorted = false;
 			}
 			else {
-				for (int i = m_size - 1; i > index; i--) {
-					m_ptr[i] = m_ptr[i - 1];
-				}
-				m_ptr[index] = item;
+				i++;
 			}
 		}
-		else {
-			std::cout << "Invalid index for insert: " << index << "." << std::endl;
+		if (sorted) {
+			break;
 		}
+		sorted = true;
 	}
-	void pop_back() {
-		if (m_size > 0) {
-			m_size--;
-		}
-		else {
-			std::cout << "The vector is empty." << std::endl;
-		}
-	}
-	void erase(int index) {
-		if (index == m_size - 1) {
-			m_size--;
-		}
-		else if (index < m_size - 1 && index >= 0) {
-			for (int i = index; i < m_size; i++) {
-				m_ptr[i] = m_ptr[i + 1];
-			}
-			m_size--;
-
-		}
-		else {
-			std::cout << "Invalid index for erase: " << index << "." << std::endl;
-		}
-	}
-	void clear() {
-		m_size = 0;
-	}
-	void print() {
-		if (m_size > 0) {
-			std::cout << "{ ";
-			for (int i = 0; i < m_size - 1; i++) {
-				std::cout << m_ptr[i] << ", ";
-			}
-			std::cout << m_ptr[m_size - 1] << " }";
-		}
-		else {
-			std::cout << "The vector is empty." << std::endl;
-		}
-	}
-	void swap(int& a, int& b) {
-		int temp = a;
-		a = b;
-		b = temp;
-	}
-	void buble_sort() {
-		bool sorted = true;
-		for (int g = 0; g < m_size - 1; g++) {
-			for (int i = 0; i < m_size - 1;) {
-				if (m_ptr[i] > m_ptr[i + 1]) {
-					swap(m_ptr[i], m_ptr[i+1]);
-					sorted = false;
-				}
-				else {
-					i++;
-				}
-			}
-			if (sorted) {
-				break;
-			}
-			sorted = true;
-		}
-	}
-};
+}
 
 int main() {
 	srand(time(NULL));
