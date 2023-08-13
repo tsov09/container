@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include <bits/stdc++.h>
 
 #include "vector.h"
 
@@ -198,6 +199,12 @@ void Vector<T>::buble_sort() {
 	}
 }
 
+void print_unrdered_set(std::unordered_set<int> set_i) {
+	for (int item : set_i) {
+		std::cout << item << " ";
+	}
+}
+
 int main() {
 	srand(time(NULL));
 	std::cout << std::endl;
@@ -213,6 +220,27 @@ int main() {
 	arr_i.buble_sort();
 	std::cout << std::endl;
 	arr_i.print();
+
+	arr_i.push_back(36);
+	arr_i.push_back(97);
+	arr_i.push_back(148);
+	arr_i.push_back(564);
+
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "Vector: ";
+	arr_i.print();
+
+	std::unordered_set<int> set_i;
+	for (int i = 0; i < arr_i.size(); i++) {
+		set_i.insert(arr_i[i]);
+	}
+
+
+	std::cout << std::endl;
+	std::cout << "Unordered set: " << " ";
+	print_unrdered_set(set_i);
 
 	return 0;
 }
