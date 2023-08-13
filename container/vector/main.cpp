@@ -2,19 +2,20 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+
 #include "vector.h"
 
-template class Vector<int>
-template class Vector<double>
-template class Vector<float>
+template class Vector<int>;
+template class Vector<double>;
+template class Vector<float>;
 
-template <class T>
+template <typename T>
 Vector<T>::Vector() : m_size(0), m_capacity(0) {};
-template <class T>
+template <typename T>
 Vector<T>::~Vector() {
 	delete[] m_ptr;
 }
-template <class T>
+template <typename T>
 Vector<T>::Vector(const Vector<T>& obj) {
 	m_size = obj.m_size;
 	m_ptr = new T[m_size];
@@ -22,7 +23,7 @@ Vector<T>::Vector(const Vector<T>& obj) {
 		m_ptr[i] = obj.m_ptr[i];
 	}
 }
-template <class T>
+template <typename T>
 Vector<T>::Vector(Vector<T>&& obj) {
 	std::cout << "Vector move con-tor" << std::endl;
 	m_size = obj.m_size;
@@ -30,7 +31,7 @@ Vector<T>::Vector(Vector<T>&& obj) {
 	obj.m_ptr = nullptr;
 	obj.m_size = 0;
 }
-template <class T>
+template <typename T>
 Vector<T>& Vector<T>::operator = (const Vector<T>& obj) {
 	if (this != &obj) {
 		delete[] m_ptr;
@@ -43,7 +44,7 @@ Vector<T>& Vector<T>::operator = (const Vector<T>& obj) {
 	}
 	return *this;
 }
-template <class T>
+template <typename T>
 Vector<T>& Vector<T>::operator = (Vector<T>&& obj) {
 	std::cout << "Vector op. move assign." << std::endl;
 	if (this != &obj) {
@@ -56,7 +57,7 @@ Vector<T>& Vector<T>::operator = (Vector<T>&& obj) {
 	}
 	return *this;
 }
-template <class T>
+template <typename T>
 T& Vector<T>::operator[] (int i) {
 	if (i >= m_size || i < 0) {
 		std::cout << "The number is out of range" << std::endl << std::endl;
@@ -66,11 +67,11 @@ T& Vector<T>::operator[] (int i) {
 		return m_ptr[i];
 	}
 }
-template <class T>
+template <typename T>
 int Vector<T>::size() {
 	return m_size;
 }
-template <class T>
+template <typename T>
 T Vector<T>::gen_element(int x) {
 	if (x >= m_size || x < 0) {
 		std::cout << "The index is out of range" << std::endl << std::endl;
@@ -80,7 +81,7 @@ T Vector<T>::gen_element(int x) {
 		return m_ptr[x];
 	}
 }
-template <class T>
+template <typename T>
 void Vector<T>::push_back(const T& item) {
 	m_size++;
 	if (m_size - 1 == m_capacity) {
@@ -96,7 +97,7 @@ void Vector<T>::push_back(const T& item) {
 	}
 	m_ptr[m_size - 1] = item;
 }
-template <class T>
+template <typename T>
 void Vector<T>::insert(int index, const T& item) {
 	if (index == m_size) {
 		push_back(item);
@@ -129,7 +130,7 @@ void Vector<T>::insert(int index, const T& item) {
 		std::cout << "Invalid index for insert: " << index << "." << std::endl;
 	}
 }
-template <class T>
+template <typename T>
 void Vector<T>::pop_back() {
 	if (m_size > 0) {
 		m_size--;
@@ -138,7 +139,7 @@ void Vector<T>::pop_back() {
 		std::cout << "The vector is empty." << std::endl;
 	}
 }
-template <class T>
+template <typename T>
 void Vector<T>::erase(int index) {
 	if (index == m_size - 1) {
 		m_size--;
@@ -154,11 +155,11 @@ void Vector<T>::erase(int index) {
 		std::cout << "Invalid index for erase: " << index << "." << std::endl;
 	}
 }
-template <class T>
+template <typename T>
 void Vector<T>::clear() {
 	m_size = 0;
 }
-template <class T>
+template <typename T>
 void Vector<T>::print() {
 	if (m_size > 0) {
 		std::cout << "{ ";
@@ -171,13 +172,13 @@ void Vector<T>::print() {
 		std::cout << "The vector is empty." << std::endl;
 	}
 }
-template <class T>
-void Vector<T>::swap(int& a, int& b) {
+template <typename T>
+void Vector<T>::swap(T& a, T& b) {
 	int temp = a;
 	a = b;
 	b = temp;
 }
-template <class T>
+template <typename T>
 void Vector<T>::buble_sort() {
 	bool sorted = true;
 	for (int g = 0; g < m_size - 1; g++) {
