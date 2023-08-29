@@ -11,7 +11,7 @@ template class Vector<double>;
 template class Vector<float>;
 
 template <typename T>
-Vector<T>::Vector() : m_size(0), m_capacity(0) {};
+Vector<T>::Vector() : m_size(0), m_capacity(0), next(0) {};
 template <typename T>
 Vector<T>::~Vector() {
 	delete[] m_ptr;
@@ -199,6 +199,82 @@ void Vector<T>::buble_sort() {
 	}
 }
 
+template <typename T>
+void Vector<T>::merge(int left, int middle, int right) {
+	int size_1 = middle - left + 1;
+	next++;
+	int size_2 = right - middle;
+	next++;
+
+	int* vec1 = new int[size_1];
+	int* vec2 = new int[size_2];
+
+	for (int i = 0; i < size_1; i++) {
+		vec1[i] = m_ptr[left + i];
+		next++;
+	}
+
+	for (int i = 0; i < size_2; i++) {
+		vec2[i] = m_ptr[middle + i + 1];
+		next++;
+
+	}
+
+	int i = 0;
+	next++;
+
+	int j = 0;
+	next++;
+
+	int k = left;
+	next++;
+
+	while (i < size_1 && j < size_2) {
+		if (vec1[i] <= vec2[j]) {
+			m_ptr[k] = vec1[i];
+			i++;
+		}
+		else {
+			m_ptr[k] = vec2[j];
+			next++;
+			j++;
+		}
+		k++;
+
+	}
+
+	while (i < size_1) {
+		m_ptr[k] = vec1[i];
+		next++;
+		i++;
+		k++;
+	}
+
+	while (j < size_2) {
+		m_ptr[k] = vec2[j];
+		next++;
+		j++;
+		k++;
+	}
+}
+
+template <typename T>
+void Vector<T>::merge_sort() {
+	next = 0;
+	merge_sort_rec(0, m_size);
+}
+
+template <typename T>
+void Vector<T>::merge_sort_rec(int left, int right) {
+	if (left < right) {
+		int middle = left + (right - left) / 2;
+		next++;
+		merge_sort_rec(left, middle);
+		merge_sort_rec(middle + 1, right);
+		merge(left, middle, right);
+	}
+}
+
 void print_unrdered_set(std::unordered_set<int> set_i) {
 	for (int item : set_i) {
 		std::cout << item << " ";
@@ -207,7 +283,6 @@ void print_unrdered_set(std::unordered_set<int> set_i) {
 
 int main() {
 	srand(time(NULL));
-	std::cout << std::endl;
 	Vector<int> arr_i;
 	arr_i.push_back(47);
 	arr_i.push_back(10);
@@ -217,30 +292,13 @@ int main() {
 	arr_i.push_back(17);
 	arr_i.push_back(57);
 	arr_i.print();
-	arr_i.buble_sort();
 	std::cout << std::endl;
+
+	arr_i.merge_sort();
 	arr_i.print();
-
-	arr_i.push_back(36);
-	arr_i.push_back(97);
-	arr_i.push_back(148);
-	arr_i.push_back(564);
-
-
 	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << "Vector: ";
-	arr_i.print();
-
-	std::unordered_set<int> set_i;
-	for (int i = 0; i < arr_i.size(); i++) {
-		set_i.insert(arr_i[i]);
-	}
-
-
-	std::cout << std::endl;
-	std::cout << "Unordered set: " << " ";
-	print_unrdered_set(set_i);
 
 	return 0;
 }
+
+
