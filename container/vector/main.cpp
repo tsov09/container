@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <bits/stdc++.h>
+#include <string>
 
 #include "vector.h"
 
@@ -69,6 +70,16 @@ T& Vector<T>::operator[] (int i) {
 	}
 }
 template <typename T>
+T& Vector<T>::at(int i) {
+	if (i >= m_size || i < 0) {
+		throw "Error";
+	}
+	else {
+		return m_ptr[i];
+	}
+
+}
+template <typename T>
 int Vector<T>::size() {
 	return m_size;
 }
@@ -103,7 +114,7 @@ void Vector<T>::insert(int index, const T& item) {
 	if (index == m_size) {
 		push_back(item);
 	}
-	else if (index < m_size && index >= 0) {
+	else if (index < m_size&& index >= 0) {
 		m_size++;
 		if (m_size - 1 == m_capacity) {
 			m_capacity = m_size * 2;
@@ -185,7 +196,7 @@ void Vector<T>::buble_sort() {
 	for (int g = 0; g < m_size - 1; g++) {
 		for (int i = 0; i < m_size - 1;) {
 			if (m_ptr[i] > m_ptr[i + 1]) {
-				swap(m_ptr[i], m_ptr[i+1]);
+				swap(m_ptr[i], m_ptr[i + 1]);
 				sorted = false;
 			}
 			else {
@@ -298,6 +309,12 @@ int main() {
 	arr_i.print();
 	std::cout << std::endl;
 
+	try {
+		std::cout << arr_i.at(20) << std::endl;
+	}
+	catch (...) {
+		std::cout << "The index is out of range." << std::endl << std::endl;
+	}
 	return 0;
 }
 
