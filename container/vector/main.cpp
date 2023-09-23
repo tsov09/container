@@ -272,7 +272,7 @@ void Vector<T>::merge(int left, int middle, int right) {
 template <typename T>
 void Vector<T>::merge_sort() {
 	next = 0;
-	merge_sort_rec(0, m_size);
+	merge_sort_rec(0, m_size - 1);
 }
 
 template <typename T>
@@ -293,24 +293,27 @@ void print_unrdered_set(std::unordered_set<int> set_i) {
 }
 
 int main() {
+
 	srand(time(NULL));
-	Vector<int> arr_i;
-	arr_i.push_back(47);
-	arr_i.push_back(10);
-	arr_i.push_back(46);
-	arr_i.push_back(45);
-	arr_i.push_back(12);
-	arr_i.push_back(17);
-	arr_i.push_back(57);
-	arr_i.print();
+	Vector<int> vector;
+	vector.push_back(47);
+	vector.push_back(10);
+	vector.push_back(46);
+	vector.push_back(45);
+	vector.push_back(12);
+	vector.push_back(17);
+	vector.push_back(57);
+	vector.push_back(-1);
+
+	vector.print();
 	std::cout << std::endl;
 
-	arr_i.merge_sort();
-	arr_i.print();
+	vector.merge_sort();
+	vector.print();
 	std::cout << std::endl;
 
 	try {
-		std::cout << arr_i.at(20) << std::endl;
+		std::cout << vector.at(20) << std::endl;
 	}
 	catch (...) {
 		std::cout << "The index is out of range." << std::endl << std::endl;
